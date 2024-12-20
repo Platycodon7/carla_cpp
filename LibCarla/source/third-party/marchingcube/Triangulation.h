@@ -283,15 +283,17 @@ void MeshReconstruction::Triangulate(
   // Cube 完全在表面内/外。不生成三角形。
   if (intersect.signConfig == 0 || intersect.signConfig == 255)
     return;
-
+// 获取与当前交点符号配置相对应的三角形索引数组
   auto const &tri = signConfigToTriangles[intersect.signConfig];
-
+// 遍历三角形索引数组，每次迭代处理三个顶点（一个三角形）
+// 数组中的每个连续的三个非 -1 值代表一个三角形的三个顶点索引
   for (auto i = 0; tri[i] != -1; i += 3)
   {
+       // 根据三角形索引从交点的边缘顶点索引列表中获取实际的顶点
     auto const &v0 = intersect.edgeVertIndices[tri[i]];
     auto const &v1 = intersect.edgeVertIndices[tri[i + 1]];
     auto const &v2 = intersect.edgeVertIndices[tri[i + 2]];
-
+ // 将三角形的顶点添加到网格的顶点列表中
     mesh.vertices.push_back(v0);
     mesh.vertices.push_back(v1);
     mesh.vertices.push_back(v2);
